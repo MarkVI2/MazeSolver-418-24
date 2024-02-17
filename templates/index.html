@@ -1,18 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Maze Solver</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <form method="POST" enctype="multipart/form-data">
-        <input type="file" name="image" accept="image/*">
-        <button type="submit">Upload</button>
-    </form>
-    {% if image_filename %}
-    <img src="{{ url_for('uploads', filename=image_filename) }}" alt="Uploaded Image">
-    {% endif %}
+    <h1 class="header">Maze Solver</h1> <br />
+
+    <div class="container">
+        <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
+            <div class="file-upload-container">
+                <p>Select the maze to be solved: </p>
+                <input type="file" name="file" id="file-input">
+                <input type="submit" value="Upload">
+            </div>
+        </form>
+        <div class="image-container">
+            <div class="image-box">
+                {% if invalid_file_type %}
+                <p class="error-message">Invalid file type. Please try again!</p>
+                {% else %}
+                <img src="{{ url_for('uploaded_file', filename=image_filename) }}" alt="Uploaded image">
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const input = document.getElementById('file-input');
+        const filenameDiv = document.getElementById('filename');
+        input.addEventListener('change', () => {
+            const filename = input.value.split(/\\|\//).pop();
+            filenameDiv.textContent = filename;
+        });
+    </script>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 
 </html>
